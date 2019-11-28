@@ -9,7 +9,11 @@ import Tabla from '../../components/Users/Tabla';
 class Users extends Component {
 
     componentDidMount() {
-        this.props.traerTodos();
+        //si no hay usuarios ve y traerlos
+        if (!this.props.usuarios.length) {
+            this.props.traerTodos();
+        }
+        //si ya tenemos usuarios no hagas nada
     }
 
     ponerContenido = () => {
