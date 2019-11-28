@@ -1,5 +1,14 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+
+## This Project is a Blog
+
+Contiene una vista -> Lista de usuarios 
+                      Publicaciones de usuario
+                      Comentarios de cada publicación
+
+
+
 ## Available Scripts
 
 In the project directory, you can run:
