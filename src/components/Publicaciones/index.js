@@ -2,12 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Spinner from '../General/Spinner';
 import ErrorFatal from '../General/ErrorFatal';
+import Comentarios from './Comentarios';
 
 import * as usuariosActions from '../../actions/usuariosActions';
 import * as publicacionesActions from '../../actions/publicacionesActions';
 
 const { traerTodos: usuariosTraerTodos } = usuariosActions;
-const { traerPorUsuario: publicacionesTraerPorUsuario } = publicacionesActions;
+const {
+    traerPorUsuario: publicacionesTraerPorUsuario,
+    abrirCerrar,
+    traerComentarios
+} = publicacionesActions;
 
 class Publicaciones extends Component {
     //async para asegurarnos de que primero nos traiga los usuarios, despues los posts del usuarios
@@ -82,11 +87,21 @@ class Publicaciones extends Component {
 
         const { publicaciones_key } = usuarios[key];
         //Si todo sale bien
-        return publicaciones[publicaciones_key].map((publicacion) => (
+        return this.mostrarInfo(
+            publicaciones[publicaciones_key],
+            publicaciones_key
+        );
+
+    };
+
+    mostrarInfo = (publicaciones, pub_key) => (
+        publicaciones.map((publicacion, coment_key) => (
             <div
                 className='pub_titulo'
-                key={publicaciones.id}
-                onClick={() => alert(publicacion.id)}
+                key={publicacion.id}
+                onClick={
+                    () => this.mostrarComentarios(pub_key, coment_key, publicacion.comentarios)
+                }
             >
                 <h2>
                     {publicacion.title}
@@ -94,9 +109,19 @@ class Publicaciones extends Component {
                 <h3>
                     {publicacion.body}
                 </h3>
+                {
+                    (publicacion.abierto) ? <Comentarios comentarios={publicacion.comentarios} /> : ''
+                }
             </div>
-        ));
-
+        ))
+    );
+    mostrarComentarios = (pub_key, coment_key, comentarios) => {
+        //si tenemos comentarios 
+        this.props.abrirCerrar(pub_key, coment_key);
+        //si no tenemos comentarios va a ir a traerlos
+        if (!comentarios.length) {
+            this.props.traerComentarios(pub_key, coment_key);
+        }
     };
 
     render() {
@@ -120,7 +145,9 @@ const mapStateToProps = ({ usuariosReducer, publicacionesReducer }) => {
 
 const mapDispatchToProps = {
     usuariosTraerTodos,
-    publicacionesTraerPorUsuario
+    publicacionesTraerPorUsuario,
+    abrirCerrar,
+    traerComentarios
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Publicaciones);

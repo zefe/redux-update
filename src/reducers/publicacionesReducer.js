@@ -1,15 +1,24 @@
-import { TRAER_POR_USUARIO, CARGANDO, ERROR } from '../types/publicacionesTypes'; //Action type
+import {
+    ACTUALIZAR,
+    CARGANDO,
+    ERROR,
+    COMENT_CARGANDO,
+    COMENT_ERROR,
+    COMENT_ACTUALIZAR
+} from '../types/publicacionesTypes'; //Action type
 
 //Estado inicial de usarios
 const INITIAL_STATE = {
     publicaciones: [],
     cargando: false,
-    error: ''
+    error: '',
+    coment_cargando: false,
+    coment_error: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case TRAER_POR_USUARIO:
+        case ACTUALIZAR:
             return {
                 ...state,
                 publicaciones: action.payload,
@@ -28,6 +37,27 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 error: action.payload,
                 cargando: false
+            };
+
+        case COMENT_ACTUALIZAR:
+            return {
+                ...state,
+                publicaciones: action.payload,
+                coment_cargando: false,
+                coment_error: ''
+            }
+
+        case COMENT_CARGANDO:
+            return {
+                ...state,
+                coment_cargando: true
+            };
+
+        case COMENT_ERROR:
+            return {
+                ...state,
+                coment_error: action.payload,
+                coment_cargando: false
             };
 
         default: return state;
